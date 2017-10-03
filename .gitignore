@@ -57,3 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+# Cloud 9 config folder
+.c9
+
+# esm-cache
+esm-cache/
