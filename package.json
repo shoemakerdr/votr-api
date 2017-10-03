@@ -1,0 +1,39 @@
+{
+  "name": "votr-api",
+  "version": "1.0.0",
+  "description": "FCC's Voting App Project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "lint": "eslint src/*.js || true",
+    "test": "mocha -R dot --require babel-register --recursive || true",
+    "watch": "mocha -R dot --require babel-register --recursive --watch || true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shoemakerdr/votr-api.git"
+  },
+  "engines": {
+      "node": "8.1.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shoemakerdr/votr-api/issues"
+  },
+  "homepage": "https://github.com/shoemakerdr/votr-api#readme",
+  "devDependencies": {
+    "babel-preset-env": "^1.6.0",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "eslint": "^4.8.0",
+    "mocha": "^4.0.0",
+    "nodemon": "^1.12.1"
+  },
+  "dependencies": {
+    "@std/esm": "^0.11.2",
+    "express": "^4.16.1"
+  }
+}
