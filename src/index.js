@@ -1,9 +1,9 @@
 import express from 'express'
-import router from './routes'
+import apiRoutes from './routes'
 
 const app = express()
 
-app.use('/api', router)
+app.use('/api', apiRoutes)
 
 app.get('/', (req, res) => {
     const json = JSON.stringify({message: 'Welcome to the votr API. Please use the /api route.'})
