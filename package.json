@@ -7,15 +7,17 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "lint": "eslint src/*.js || true",
-    "test": "mocha -R dot --require babel-register --recursive || true",
-    "watch": "mocha -R dot --require babel-register --recursive --watch || true"
+    "test": "mocha || true",
+    "unittest": "mocha ./test/unit/** || true",
+    "servertest": "mocha ./test/server/** || true",
+    "watchtest": "mocha --watch || true"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shoemakerdr/votr-api.git"
   },
   "engines": {
-      "node": "8.1.2"
+    "node": "8.1.2"
   },
   "keywords": [],
   "author": "",
@@ -30,10 +32,12 @@
     "chai": "^4.1.2",
     "eslint": "^4.8.0",
     "mocha": "^4.0.0",
-    "nodemon": "^1.12.1"
+    "nodemon": "^1.12.1",
+    "supertest": "^3.0.0"
   },
   "dependencies": {
     "@std/esm": "^0.11.2",
+    "dotenv": "^4.0.0",
     "express": "^4.16.1"
   }
 }
