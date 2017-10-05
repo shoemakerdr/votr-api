@@ -61,4 +61,4 @@ typings/
 .c9
 
 # esm-cache
-esm-cache/
+.esm-cache/
