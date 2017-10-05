@@ -1,0 +1,3 @@
+--reporter dot
+--require babel-register
+--recursive 
