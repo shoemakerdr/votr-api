@@ -6,7 +6,7 @@ const app = express()
 app.use('/api', apiRoutes)
 
 app.get('/', (req, res) => {
-    const json = JSON.stringify({message: 'Welcome to the votr API. Please use the /api route.'})
+    const json = {message: 'Welcome to the votr API. Please use the /api route.'}
     res.json(json)
 })
 

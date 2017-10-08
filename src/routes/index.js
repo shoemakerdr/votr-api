@@ -14,7 +14,7 @@ const router = Router()
 
 router.route('/')
     .get((req, res) => {
-        const json = JSON.stringify({message: 'Welcome to the Votr API!'})
+        const json = {message: 'Welcome to the Votr API!'}
         res.json(json)
     })
 
