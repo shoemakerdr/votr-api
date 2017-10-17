@@ -5,7 +5,7 @@ const db = pg()(process.env.DATABASE_URL)
 /**
  * /polls
  * -> [{poll: 'Name of poll'}...]
- * 
+ *
  * /polls/:poll_id
  * -> {
  *   poll: 'Name of poll',
@@ -38,7 +38,7 @@ const getUserPolls = async user_id => {
     /**
      * possible query:
      * -> SELECT poll_id, title
-     *    FROM polls 
+     *    FROM polls
      *    WHERE user_id = <user_id>;
      *
      *     poll_id |            title
@@ -104,7 +104,7 @@ const addVote = async (poll_id, option_id, username_or_ip) {
 const removePoll = async (poll_id) {
     /**
      * possible query:
-     * -> 
+     * ->
      */
 }
 
