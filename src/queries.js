@@ -1,6 +1,8 @@
 import pg from 'pg-promise'
+import dotenv from 'dotenv'
+dotenv.config()
 
-const db = pg()(process.env.DATABASE_URL)
+const db = pg()(process.env.DATABASE_TEST)
 
 /**
  * /polls
@@ -24,14 +26,25 @@ const db = pg()(process.env.DATABASE_URL)
 
 const getAllPolls = async () => {
     /**
-     * possible query:
-     * -> SELECT poll_id, title FROM polls;
-     *
-     *     poll_id |             title
-     *    ---------+-------------------------------
-     *           1 | What is your favorite color?
-     *           2 | What is your favorite animal?
+     * sample output:
+     *    [
+     *        {
+     *            poll_id: 1,
+     *            title: 'What is your favorite color?'
+     *        },
+     *        {
+     *            poll_id: 2,
+     *            title: 'What is your favorite animal?',
+     *        }
+     *    ]
      */
+    try {
+        const data = await db.any('SELECT poll_id, title FROM polls;')
+        return data
+    }
+    catch (err) {
+        console.error(err)
+    }
 }
 
 const getUserPolls = async user_id => {
@@ -49,20 +62,39 @@ const getUserPolls = async user_id => {
 
 const getPoll = async poll_id => {
     /**
-     * possible query:
-     * -> SELECT polls.title, options.option, COUNT(votes.vote_id) as num_of_votes
-     *    FROM votes
-     *    INNER JOIN options ON options.option_id = votes.option_id
-     *    INNER JOIN polls ON options.poll_id = polls.poll_id
-     *    WHERE poll_id = <poll_id>
-     *    GROUP BY polls.poll_id, options.option;
-     *
-     *                title             | option | num_of_votes
-     *    ------------------------------+--------+--------------
-     *     What is your favorite color? | green  |            2
-     *     What is your favorite color? | red    |            1
-     *     What is your favorite color? | blue   |            1
+     * sample output:
+     *     {
+     *         title: 'What is your favorite color?",
+     *         options: [
+     *             {id: 1, name: 'blue', votes: 1},
+     *             {id: 2, name: 'green', votes: 2},
+     *             {id: 3, name: 'red', votes: 1}
+     *         ]
+     *     }
      */
+
+    try {
+        const data = await db.any(`
+            SELECT polls.title, options.option, options.option_id, COUNT(votes.vote_id) as num_of_votes
+            FROM options
+            LEFT OUTER JOIN votes ON options.option_id = votes.option_id
+            INNER JOIN polls ON options.poll_id = polls.poll_id
+            WHERE options.poll_id = $1
+            GROUP BY polls.poll_id, options.option_id;
+        `, poll_id)
+        const title = data[0].title
+        const options = data.map(option => {
+            return {
+                id: option.option_id,
+                name: option.option,
+                votes: option.num_of_votes
+            }
+        })
+        return { title, options }
+    }
+    catch (err) {
+        console.error(err)
+    }
 }
 
 const addUser = async username => {
