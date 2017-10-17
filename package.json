@@ -4,8 +4,8 @@
   "description": "FCC's Voting App Project",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "node -r @std/esm src/index.js",
+    "dev": "nodemon -r @std/esm src/index.js",
     "lint": "eslint src/*.js || true",
     "test": "mocha || true",
     "unittest": "mocha ./test/unit/** || true",
@@ -18,6 +18,10 @@
   },
   "engines": {
     "node": "8.1.2"
+  },
+  "@std/esm": {
+      "esm": "js",
+      "cjs": true
   },
   "keywords": [],
   "author": "",
