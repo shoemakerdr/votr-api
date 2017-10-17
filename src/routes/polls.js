@@ -1,18 +1,17 @@
 import { Router } from 'express'
+import { getAllPolls, getPoll } from '../queries'
 
 const router = Router()
 
 router.route('/')
     .get((req, res) => {
-        const json = {polls:['poll1', 'poll2','poll3']}
-        res.json(json)
+        getAllPolls().then(data => res.json(data))
     })
 
 
 router.route('/:poll')
     .get((req, res) => {
-        const json = {poll:req.params.poll}
-        res.json(json)
+        getPoll(req.params.poll).then(data => res.json(data))
     })
 
 export default router
