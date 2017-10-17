@@ -85,7 +85,7 @@ const addPoll = async (user_id, title, options) => {
      */
 }
 
-const addOption = async (option, poll_id) {
+const addOption = async (option, poll_id) => {
     /**
      * possible query:
      * -> INSERT INTO options(option, poll_id)
@@ -93,7 +93,7 @@ const addOption = async (option, poll_id) {
      */
 }
 
-const addVote = async (poll_id, option_id, username_or_ip) {
+const addVote = async (poll_id, option_id, username_or_ip) => {
     /**
      * possible query:
      * -> INSERT INTO votes(poll_id, option_id, username_or_ip)
@@ -101,7 +101,7 @@ const addVote = async (poll_id, option_id, username_or_ip) {
      */
 }
 
-const removePoll = async (poll_id) {
+const removePoll = async (poll_id) => {
     /**
      * possible query:
      * ->
