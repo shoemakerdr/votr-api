@@ -4,40 +4,7 @@ dotenv.config()
 
 const db = pg()(process.env.DATABASE_TEST)
 
-/**
- * /polls
- * -> [{poll: 'Name of poll'}...]
- *
- * /polls/:poll_id
- * -> {
- *   poll: 'Name of poll',
- *   options: [
- *     {
- *       name: 'Option 1',
- *       votes: 2,
- *     },
- *     {...}
- *   ],
- *   usersVoted: ['steve123',...],
- *   ipAddressesVoted: ['127.0.0.1',...]
- * }
- *
- */
-
 const getAllPolls = async () => {
-    /**
-     * sample output:
-     *    [
-     *        {
-     *            poll_id: 1,
-     *            title: 'What is your favorite color?'
-     *        },
-     *        {
-     *            poll_id: 2,
-     *            title: 'What is your favorite animal?',
-     *        }
-     *    ]
-     */
     try {
         const data = await db.any('SELECT poll_id, title FROM polls;')
         return data
@@ -48,31 +15,19 @@ const getAllPolls = async () => {
 }
 
 const getUserPolls = async user_id => {
-    /**
-     * possible query:
-     * -> SELECT poll_id, title
-     *    FROM polls
-     *    WHERE user_id = <user_id>;
-     *
-     *     poll_id |            title
-     *    ---------+------------------------------
-     *           1 | What is your favorite color?
-     */
+    try {
+        const data = await db.any(`
+            SELECT poll_id, title
+            FROM polls
+            WHERE user_id = $1;`, user_id)
+        return data
+    }
+    catch (err) {
+        console.error(err)
+    }
 }
 
 const getPoll = async poll_id => {
-    /**
-     * sample output:
-     *     {
-     *         title: 'What is your favorite color?",
-     *         options: [
-     *             {id: 1, name: 'blue', votes: 1},
-     *             {id: 2, name: 'green', votes: 2},
-     *             {id: 3, name: 'red', votes: 1}
-     *         ]
-     *     }
-     */
-
     try {
         const data = await db.any(`
             SELECT polls.title, options.option, options.option_id, COUNT(votes.vote_id) as num_of_votes
