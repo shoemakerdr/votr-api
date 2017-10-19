@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { getUserPolls } from '../queries'
 
 const router = Router()
 
@@ -10,8 +11,7 @@ router.route('/:user')
 
 router.route('/:user/polls')
     .get((req, res) => {
-        const json = {user:req.params.user, polls: ['poll','poll','poll']}
-        res.json(json)
+        getUserPolls(req.params.user).then(data => res.json(data))
     })
 
 export default router
