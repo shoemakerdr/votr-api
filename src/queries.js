@@ -19,7 +19,8 @@ const getUserPolls = async user_id => {
         const data = await db.any(`
             SELECT poll_id, title
             FROM polls
-            WHERE user_id = $1;`, user_id)
+            WHERE user_id = $1;
+            `, user_id)
         return data
     }
     catch (err) {
@@ -36,7 +37,7 @@ const getPoll = async poll_id => {
             INNER JOIN polls ON options.poll_id = polls.poll_id
             WHERE options.poll_id = $1
             GROUP BY polls.poll_id, options.option_id;
-        `, poll_id)
+            `, poll_id)
         const title = data[0].title
         const options = data.map(option => {
             return {
@@ -61,26 +62,42 @@ const addUser = async username => {
 }
 
 const addPoll = async (user_id, title, options) => {
-    /**
-     * possible query:
-     * -> INSERT INTO polls(title, user_id)
-     *    VALUES(<title>, <user_id>);
-     *
-     *    (for each <option> in <options>)
-     *    INSERT INTO options(option, poll_id)
-     *    VALUES(<option>, (SELECT poll_id FROM polls WHERE title = <title>));
-     */
+    try {
+        const poll = await db.tx(async t => {
+            const poll = await t.one(`
+                INSERT INTO polls(title, user_id)
+                VALUES($1, $2)
+                RETURNING poll_id;
+            `, [title, user_id])
+            const optionQueries = options.map(option => {
+                return t.none(`
+                    INSERT INTO options(option, poll_id)
+                    VALUES($1, $2);
+                `, [option, poll.poll_id])
+            })
+            const queries = await t.batch(optionQueries)
+            return poll
+        })
+        return poll
+    } catch (err) {
+        console.error(err)
+    }
 }
 
 const addOption = async (option, poll_id) => {
-    /**
-     * possible query:
-     * -> INSERT INTO options(option, poll_id)
-     *    VALUES(<option>, <poll_id>);
-     */
+    try {
+        const poll = await db.one(`
+            INSERT INTO options(option, poll_id)
+            VALUES($1,$2)
+            RETURNING poll_id;
+        `, [option, poll_id])
+        return poll
+    } catch (err) {
+        console.error(err)
+    }
 }
 
-const addVote = async (poll_id, option_id, username_or_ip) => {
+const addVote = async (option_id, username_or_ip) => {
     /**
      * possible query:
      * -> INSERT INTO votes(poll_id, option_id, username_or_ip)
@@ -88,11 +105,19 @@ const addVote = async (poll_id, option_id, username_or_ip) => {
      */
 }
 
-const removePoll = async (poll_id) => {
-    /**
-     * possible query:
-     * ->
-     */
+const removePoll = async poll_id => {
+    try {
+        const queries = await db.tx(async t => {
+            return t.batch([
+                t.none(`DELETE FROM polls WHERE poll_id = $1;`, poll_id),
+                t.none(`DELETE FROM options WHERE poll_id = $1;`, poll_id),
+                t.none(`DELETE FROM votes WHERE poll_id = $1;`, poll_id)
+            ])
+        })
+        return {success: true}
+    } catch (err) {
+        console.error(err)
+    }
 }
 
 export {
