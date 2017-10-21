@@ -20,8 +20,8 @@
     "node": "8.1.2"
   },
   "@std/esm": {
-      "esm": "js",
-      "cjs": true
+    "esm": "js",
+    "cjs": true
   },
   "keywords": [],
   "author": "",
@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "@std/esm": "^0.11.2",
+    "body-parser": "^1.18.2",
     "dotenv": "^4.0.0",
     "express": "^4.16.1",
     "pg-promise": "^7.0.0"
