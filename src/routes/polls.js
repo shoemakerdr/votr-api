@@ -39,7 +39,20 @@ router.route('/:poll/option')
 
 router.route('/:poll/vote')
     .post((req, res) => {
-        getPoll(req.params.poll).then(data => res.json(data))
+        const optionId = req.body.optionId
+        const username = req.body.username
+        const ipAddress = req.ip
+        addVote(req.params.poll, optionId, username, ipAddress).then(data => res.json(data))
+    })
+
+router.route('/:poll/new-option-vote')
+    .post(async (req, res) => {
+        const pollId = req.params.poll
+        const option = req.body.option
+        const username = req.body.username
+        const ipAddress = req.ip
+        const { option_id } = await addOption(option, pollId)
+        addVote(pollId, option_id, username, ipAddress).then(data => res.json(data))
     })
 
 export default router
