@@ -7,6 +7,8 @@
     "start": "node -r @std/esm src/index.js",
     "dev": "nodemon -r @std/esm src/index.js",
     "lint": "eslint src/*.js || true",
+    "db-setup": "psql -p 5432 -f votr.sql",
+    "db": "npm run db-setup && psql -p 5432 -d 'votr'",
     "test": "mocha || true",
     "unittest": "mocha ./test/unit/** || true",
     "servertest": "mocha ./test/server/** || true",
