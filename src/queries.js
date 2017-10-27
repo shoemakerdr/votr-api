@@ -38,6 +38,9 @@ const getPoll = async poll_id => {
             WHERE options.poll_id = $1
             GROUP BY polls.poll_id, options.option_id;
             `, poll_id)
+        if (data[0] === undefined) {
+            return {error: 'Poll does not exist'}
+        }
         const title = data[0].title
         const options = data.map(option => {
             return {
@@ -86,23 +89,32 @@ const addPoll = async (user_id, title, options) => {
 
 const addOption = async (option, poll_id) => {
     try {
-        const poll = await db.one(`
+        const optionId = await db.one(`
             INSERT INTO options(option, poll_id)
             VALUES($1,$2)
-            RETURNING poll_id;
+            RETURNING option_id;
         `, [option, poll_id])
-        return poll
+        return optionId
     } catch (err) {
         console.error(err)
     }
 }
 
-const addVote = async (option_id, username_or_ip) => {
+const addVote = async (poll_id, option_id, username, ip_address) => {
     /**
      * possible query:
      * -> INSERT INTO votes(poll_id, option_id, username_or_ip)
      *    VALUES(<poll_id>, <option_id>, <username_or_ip>);
      */
+    try {
+        const query = await db.none(`
+            INSERT INTO votes(poll_id, option_id, username, ip_address)
+            VALUES($1, $2, $3, $4);
+        `, [poll_id, option_id, username, ip_address])
+        return {success: true}
+    } catch (err) {
+        console.error(err)
+    }
 }
 
 const removePoll = async poll_id => {
