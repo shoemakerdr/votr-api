@@ -62,6 +62,17 @@ const addUser = async username => {
      * -> INSERT INTO users(username)
      *    VALUES(<username>);
      */
+    try {
+        const user = await db.one(`
+            INSERT INTO users(username)
+            VALUES($1)
+            RETURNING user_id;
+        `, [username])
+        return user
+    }
+    catch (err) {
+        console.error(err)
+    }
 }
 
 const addPoll = async (user_id, title, options) => {
