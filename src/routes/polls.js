@@ -17,7 +17,7 @@ router.route('/')
     .post((req,res) => {
         const userId = req.body.userId
         const title = req.body.title
-        const options = req.body.options.split(',')
+        const options = req.body.options.split('\n')
         addPoll(userId, title, options).then(data => res.json(data))
     })
 
