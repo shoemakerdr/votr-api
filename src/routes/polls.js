@@ -18,7 +18,7 @@ router.route('/')
         const username = req.body.username
         const title = req.body.title
         const options = req.body.options.split('\n')
-        addPoll(userId, title, options).then(data => res.json(data))
+        addPoll(username, title, options).then(data => res.json(data))
     })
 
 
