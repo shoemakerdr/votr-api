@@ -1,12 +1,13 @@
 import { Router } from 'express'
-import { getUserPolls, addUser } from '../queries'
+import { getUserPolls, createUser } from '../queries'
 
 const router = Router()
 
 router.route('/')
     .post((req, res) => {
         const username = req.body.username
-        addUser(username).then(data => res.json(data))
+        const password = req.body.password
+        createUser(username, password).then(data => res.json(data))
     })
 
 router.route('/:username')
