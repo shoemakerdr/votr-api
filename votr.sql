@@ -5,7 +5,7 @@ CREATE DATABASE votr;
 
 CREATE TABLE users (
     username VARCHAR(50) PRIMARY KEY,
-    password VARCHAR(60)
+    password VARCHAR(60) NOT NULL
 );
 
 CREATE TABLE polls (
@@ -26,8 +26,8 @@ CREATE TABLE votes (
     option_id SERIAL NOT NULL
 );
 
-INSERT INTO users (username)
-VALUES ('derek');
+INSERT INTO users (username, password)
+VALUES ('derek', 'ffff');
 
 INSERT INTO polls (title, username)
 VALUES (
