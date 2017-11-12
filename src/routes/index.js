@@ -1,14 +1,7 @@
 import { Router } from 'express'
 import polls from './polls'
 import users from './users'
-
-/**
- * Routes:
- *    /polls
- *    /polls/:poll
- *    /users/:user
- *    /users/:user/polls
- */
+import auth from './auth'
 
 const router = Router()
 
@@ -20,5 +13,6 @@ router.route('/')
 
 router.use('/polls', polls)
 router.use('/users', users)
+router.use('/auth', auth)
 
 export default router
