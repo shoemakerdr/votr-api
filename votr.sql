@@ -4,14 +4,14 @@ CREATE DATABASE votr;
 \c votr;
 
 CREATE TABLE users (
-    user_id SERIAL PRIMARY KEY,
-    username VARCHAR(60) NOT NULL
+    username VARCHAR(50) PRIMARY KEY,
+    password VARCHAR(60)
 );
 
 CREATE TABLE polls (
     poll_id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
-    user_id SERIAL NOT NULL
+    username VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE options (
@@ -23,18 +23,16 @@ CREATE TABLE options (
 CREATE TABLE votes (
     vote_id SERIAL PRIMARY KEY,
     poll_id SERIAL NOT NULL,
-    option_id SERIAL NOT NULL,
-    username VARCHAR(255),
-    ip_address VARCHAR(16)
+    option_id SERIAL NOT NULL
 );
 
 INSERT INTO users (username)
 VALUES ('derek');
 
-INSERT INTO polls (title, user_id)
+INSERT INTO polls (title, username)
 VALUES (
     'What is your favorite color?',
-    (SELECT user_id FROM users WHERE username = 'derek')
+    'derek'
 );
 
 INSERT INTO options (option, poll_id)
