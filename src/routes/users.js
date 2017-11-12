@@ -9,15 +9,15 @@ router.route('/')
         addUser(username).then(data => res.json(data))
     })
 
-router.route('/:user')
+router.route('/:username')
     .get((req, res) => {
-        const json = {user:req.params.user}
+        const json = {username:req.params.username}
         res.json(json)
     })
 
-router.route('/:user/polls')
+router.route('/:username/polls')
     .get((req, res) => {
-        getUserPolls(req.params.user).then(data => res.json(data))
+        getUserPolls(req.params.username).then(data => res.json(data))
     })
 
 export default router
