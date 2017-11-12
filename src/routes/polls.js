@@ -15,7 +15,7 @@ router.route('/')
         getAllPolls().then(data => res.json(data))
     })
     .post((req,res) => {
-        const userId = req.body.userId
+        const username = req.body.username
         const title = req.body.title
         const options = req.body.options.split('\n')
         addPoll(userId, title, options).then(data => res.json(data))
@@ -46,9 +46,7 @@ router.route('/:poll/vote')
             const { option_id } = await addOption(option, pollId)
             optionId = option_id
         }
-        const username = req.body.username
-        const ipAddress = req.ip
-        addVote(req.params.poll, optionId, username, ipAddress).then(data => res.json(data))
+        addVote(req.params.poll, optionId).then(data => res.json(data))
     })
 
 export default router
