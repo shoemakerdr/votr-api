@@ -14,13 +14,13 @@ const getAllPolls = async () => {
     }
 }
 
-const getUserPolls = async user_id => {
+const getUserPolls = async username => {
     try {
         const data = await db.any(`
             SELECT poll_id, title
             FROM polls
-            WHERE user_id = $1;
-            `, user_id)
+            WHERE username = $1;
+            `, username)
         return data
     }
     catch (err) {
@@ -31,7 +31,7 @@ const getUserPolls = async user_id => {
 const getPoll = async poll_id => {
     try {
         const data = await db.any(`
-            SELECT polls.title, options.option, options.option_id, COUNT(votes.vote_id) as num_of_votes
+            SELECT polls.title, polls.username, options.option, options.option_id, COUNT(votes.vote_id) as num_of_votes
             FROM options
             LEFT OUTER JOIN votes ON options.option_id = votes.option_id
             INNER JOIN polls ON options.poll_id = polls.poll_id
@@ -42,6 +42,7 @@ const getPoll = async poll_id => {
             return {error: 'Poll does not exist'}
         }
         const title = data[0].title
+        const author = data[0].username
         const options = data.map(option => {
             return {
                 id: option.option_id,
@@ -49,7 +50,7 @@ const getPoll = async poll_id => {
                 votes: option.num_of_votes
             }
         })
-        return { title, options }
+        return { title, author, options }
     }
     catch (err) {
         console.error(err)
@@ -111,17 +112,12 @@ const addOption = async (option, poll_id) => {
     }
 }
 
-const addVote = async (poll_id, option_id, username, ip_address) => {
-    /**
-     * possible query:
-     * -> INSERT INTO votes(poll_id, option_id, username_or_ip)
-     *    VALUES(<poll_id>, <option_id>, <username_or_ip>);
-     */
+const addVote = async (poll_id, option_id) => {
     try {
         const query = await db.none(`
-            INSERT INTO votes(poll_id, option_id, username, ip_address)
-            VALUES($1, $2, $3, $4);
-        `, [poll_id, option_id, username, ip_address])
+            INSERT INTO votes(poll_id, option_id)
+            VALUES($1, $2);
+        `, [poll_id, option_id])
         return {success: true}
     } catch (err) {
         console.error(err)
