@@ -57,18 +57,13 @@ const getPoll = async poll_id => {
     }
 }
 
-const addUser = async username => {
-    /**
-     * possible query:
-     * -> INSERT INTO users(username)
-     *    VALUES(<username>);
-     */
+const createUser = async (username, password) => {
     try {
         const user = await db.one(`
-            INSERT INTO users(username)
-            VALUES($1)
-            RETURNING user_id;
-        `, [username])
+            INSERT INTO users(username, password)
+            VALUES($1, $2)
+            RETURNING username;
+        `, [username, password])
         return user
     }
     catch (err) {
@@ -76,14 +71,28 @@ const addUser = async username => {
     }
 }
 
-const addPoll = async (user_id, title, options) => {
+const getUser = async username => {
+    try {
+        const user = await db.one(`
+            SELECT username, password
+            FROM users
+            WHERE username = $1;
+        `, username)
+        return user
+    }
+    catch (err) {
+        console.error(err)
+    }
+}
+
+const addPoll = async (username, title, options) => {
     try {
         const poll = await db.tx(async t => {
             const poll = await t.one(`
-                INSERT INTO polls(title, user_id)
+                INSERT INTO polls(title, username)
                 VALUES($1, $2)
                 RETURNING poll_id;
-            `, [title, user_id])
+            `, [title, username])
             const optionQueries = options.map(option => {
                 return t.none(`
                     INSERT INTO options(option, poll_id)
@@ -143,7 +152,8 @@ export {
     getAllPolls,
     getUserPolls,
     getPoll,
-    addUser,
+    createUser,
+    getUser,
     addPoll,
     addOption,
     addVote,
