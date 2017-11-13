@@ -81,7 +81,7 @@ const getUser = async username => {
         return user
     }
     catch (err) {
-        console.error(err)
+        return { error: err.message }
     }
 }
 
