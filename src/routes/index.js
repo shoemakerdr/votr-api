@@ -12,20 +12,8 @@ router.route('/')
         res.json(json)
     })
 
-// JWT auth middleware
-const jwtAuth = (req, res, next) => {
-    const token = req.headers['token']
-    if (token)
-        jwt.verify(token, process.env.AUTH_SECRET, (err, decode) => {
-            if (err)
-                res.status(500).json({error: 'Invalid token'})
-            else next()
-        })
-    else res.json({error: 'Must include token with requests'})
-}
-
-router.use('/polls', jwtAuth, polls)
-router.use('/users', jwtAuth, users)
+router.use('/polls', polls)
+router.use('/users', users)
 router.use('/auth', auth)
 
 export default router
