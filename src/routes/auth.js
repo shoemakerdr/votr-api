@@ -3,7 +3,7 @@ import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
 import { createUser, getUser } from '../queries'
 import { comparePassword, createPasswordHash } from '../helpers'
-import jwt from 'jsonwebtoken'
+import { generateToken } from '../helpers'
 
 //configure passport strategy
 passport.use(new LocalStrategy(
@@ -21,19 +21,6 @@ passport.use(new LocalStrategy(
         }
     }
 ))
-
-// jwt token generation
- const generateToken = username => (req, res) => {
-    const expiration = Math.floor(Date.now() / 1000) + 3600
-    const token = jwt.sign({user: username}, process.env.AUTH_SECRET, {
-        expiresIn: 3600
-    })
-    res.json({
-            token: token,
-            username: username,
-            expiration: expiration
-    })
-}
 
 const router = Router()
 
