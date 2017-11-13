@@ -26,9 +26,6 @@ CREATE TABLE votes (
     option_id SERIAL NOT NULL
 );
 
-INSERT INTO users (username, password)
-VALUES ('derek', 'ffff');
-
 INSERT INTO polls (title, username)
 VALUES (
     'What is your favorite color?',
