@@ -7,6 +7,7 @@ import {
     addVote,
     removePoll
 } from '../queries'
+import { jwtAuth } from '../helpers'
 
 const router = Router()
 
@@ -14,27 +15,19 @@ router.route('/')
     .get((req, res) => {
         getAllPolls().then(data => res.json(data))
     })
-    .post((req,res) => {
+    .post(jwtAuth, (req,res) => {
         const username = req.body.username
         const title = req.body.title
         const options = req.body.options.split('\n')
         addPoll(username, title, options).then(data => res.json(data))
     })
 
-
 router.route('/:poll')
     .get((req, res) => {
         getPoll(req.params.poll).then(data => res.json(data))
     })
-    .delete((req, res) => {
+    .delete(jwtAuth, (req, res) => {
         removePoll(req.params.poll).then(data => res.json(data))
-    })
-
-router.route('/:poll/option')
-    .post((req, res) => {
-        const option = req.body.option
-        const pollId = req.params.poll
-        addOption(option, pollId).then(data => res.json(data))
     })
 
 router.route('/:poll/vote')
