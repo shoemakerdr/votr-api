@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
 const comparePassword = (userPass, dbPass) => {
     return bcrypt.compareSync(userPass, dbPass)
