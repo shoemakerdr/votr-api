@@ -33,7 +33,11 @@ router.route('/register')
         const password = createPasswordHash(req.body.password)
         // res.json({user: username, password: password})
         createUser(username, password)
-            .then(data => generateToken(data.username)(req,res))
+            .then(data => {
+                if (data.error)
+                    res.json(data)
+                else generateToken(data.username)(req,res)
+            })
     })
 
 export default router
