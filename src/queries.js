@@ -67,7 +67,9 @@ const createUser = async (username, password) => {
         return user
     }
     catch (err) {
-        console.error(err)
+        if (/.+(username).+(already).+(exists)/.test(err.detail))
+            return {error: 'Username already exists'}
+        else return {error: err.message}
     }
 }
 
@@ -81,7 +83,7 @@ const getUser = async username => {
         return user
     }
     catch (err) {
-        return { error: err.message }
+        return {error: err.message}
     }
 }
 
