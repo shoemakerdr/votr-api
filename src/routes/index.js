@@ -2,7 +2,6 @@ import { Router } from 'express'
 import polls from './polls'
 import users from './users'
 import auth from './auth'
-import jwt from 'jsonwebtoken'
 
 const router = Router()
 
