@@ -2,7 +2,11 @@ import pg from 'pg-promise'
 import dotenv from 'dotenv'
 dotenv.config()
 
-const db = pg()(process.env.DATABASE_TEST)
+let db
+if (process.env.NODE_ENV === 'test')
+    db = pg()(process.env.DATABASE_TEST)
+else 
+    db = pg()(process.env.DATABASE_URL)
 
 const genericErrorMessage = {
     error: 'There was an unknown error. Please try again later.'
