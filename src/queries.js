@@ -4,13 +4,17 @@ dotenv.config()
 
 const db = pg()(process.env.DATABASE_TEST)
 
+const genericErrorMessage = {
+    error: 'There was an unknown error. Please try again later.'
+}
+
 const getAllPolls = async () => {
     try {
         const data = await db.any('SELECT poll_id, title FROM polls;')
         return data
     }
     catch (err) {
-        console.error(err)
+        return genericErrorMessage
     }
 }
 
@@ -24,7 +28,7 @@ const getUserPolls = async username => {
         return data
     }
     catch (err) {
-        console.error(err)
+        return genericErrorMessage
     }
 }
 
@@ -53,7 +57,7 @@ const getPoll = async poll_id => {
         return { title, author, options }
     }
     catch (err) {
-        console.error(err)
+        return genericErrorMessage
     }
 }
 
@@ -83,7 +87,7 @@ const getUser = async username => {
         return user
     }
     catch (err) {
-        return {error: err.message}
+        return genericErrorMessage
     }
 }
 
@@ -106,7 +110,7 @@ const addPoll = async (username, title, options) => {
         })
         return poll
     } catch (err) {
-        console.error(err)
+        return genericErrorMessage
     }
 }
 
@@ -119,7 +123,7 @@ const addOption = async (option, poll_id) => {
         `, [option, poll_id])
         return optionId
     } catch (err) {
-        console.error(err)
+        return genericErrorMessage
     }
 }
 
@@ -131,7 +135,7 @@ const addVote = async (poll_id, option_id) => {
         `, [poll_id, option_id])
         return {success: true}
     } catch (err) {
-        console.error(err)
+        return genericErrorMessage
     }
 }
 
@@ -146,7 +150,7 @@ const removePoll = async poll_id => {
         })
         return {success: true}
     } catch (err) {
-        console.error(err)
+        return genericErrorMessage
     }
 }
 
