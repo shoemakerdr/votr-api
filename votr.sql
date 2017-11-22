@@ -32,6 +32,12 @@ VALUES (
     'derek'
 );
 
+INSERT INTO polls (title, username)
+VALUES (
+    'What is your favorite animal?',
+    'derek'
+);
+
 INSERT INTO options (option, poll_id)
 VALUES (
     'blue',
@@ -48,4 +54,22 @@ INSERT INTO options (option, poll_id)
 VALUES (
     'green',
     (SELECT poll_id FROM polls WHERE title = 'What is your favorite color?')
+);
+
+INSERT INTO options (option, poll_id)
+VALUES (
+    'dog',
+    (SELECT poll_id FROM polls WHERE title = 'What is your favorite animal?')
+);
+
+INSERT INTO options (option, poll_id)
+VALUES (
+    'cat',
+    (SELECT poll_id FROM polls WHERE title = 'What is your favorite animal?')
+);
+
+INSERT INTO options (option, poll_id)
+VALUES (
+    'capybara',
+    (SELECT poll_id FROM polls WHERE title = 'What is your favorite animal?')
 );
